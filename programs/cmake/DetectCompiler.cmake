@@ -1,0 +1,27 @@
+# Detect the latest available compiler (GCC or Clang) and ask which one to use
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(DEFAULT_COMPILER "Clang")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    set(DEFAULT_COMPILER "GCC")
+else()
+    set(DEFAULT_COMPILER "Unknown")
+endif()
+
+message(STATUS "Detected compiler: ${DEFAULT_COMPILER}")
+
+if (DEFINED ENV{CXX})
+    set(CMAKE_CXX_COMPILER $ENV{CXX})
+    message(STATUS "Using compiler from CXX environment variable: $ENV{CXX}")
+else()
+    message(STATUS "Enter compiler choice (Clang/GCC): ")
+    string(REPLACE "\n" "" USER_COMPILER "")
+    execute_process(COMMAND /bin/sh -c "read -r USER_COMPILER; echo $USER_COMPILER"
+                    OUTPUT_VARIABLE USER_COMPILER)
+    if (USER_COMPILER STREQUAL "Clang")
+        set(CMAKE_CXX_COMPILER clang++)
+    elseif (USER_COMPILER STREQUAL "GCC")
+        set(CMAKE_CXX_COMPILER g++)
+    else()
+        message(FATAL_ERROR "Invalid choice. Please select Clang or GCC.")
+    endif()
+endif()
