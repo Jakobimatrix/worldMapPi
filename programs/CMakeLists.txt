@@ -10,7 +10,6 @@ project(
 include(cmake/DetectCompiler.cmake)
 include(cmake/CompilerSetup.cmake)
 include(cmake/Warnings.cmake)
-set_project_warnings(WorldMap)
 
 # Find WiringPi
 find_library(WIRINGPI_LIB wiringPi REQUIRED)

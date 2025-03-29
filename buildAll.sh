@@ -16,6 +16,7 @@ cd ../../programs
 
 [ -d build ] || mkdir build
 cd build
+cmake ..
 cmake --build .
 sudo make install
 
