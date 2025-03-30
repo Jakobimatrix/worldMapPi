@@ -16,7 +16,5 @@ find_library(WIRINGPI_LIB wiringPi REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src)
-add_subdirectory(executable)
+add_subdirectory(executable) # this also installs the programs to /usr/local/bin
 
-# Install everything
-install(TARGETS ${ALL_EXECUTABLES} RUNTIME DESTINATION bin)
