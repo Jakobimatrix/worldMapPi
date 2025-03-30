@@ -109,9 +109,9 @@ void TempToHeigh(int treshholdTemp, int suttdownTemp, std::time_t endtime){
 /*TEMPERATUR*/
 /*ONLINESTATUS*/
 bool isOnline(){
-	std::string online = exec("nc -z 8.8.8.8 53 >/dev/null 2>&1 ; online=$? ; echo $online");
+	std::string online = exec("ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1 && echo \"0\" || echo \"1\"");
 	//retrun value: 0\n OR 1\n   = [connected,disconnected]
-	if(online=="0\n"){
+	if(!online.empty() && online[0]=='0'){
 		return true;
 	}
 	return false;
