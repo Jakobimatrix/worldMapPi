@@ -12,7 +12,7 @@ extern "C" {
 #include <wiringPi.h>//ansprechen der GPIO
 }
 
-#include <lib/system.hpp>
+#include <system/system.hpp>
 #include <color/color.hpp>
 
 #include <type_traits>
