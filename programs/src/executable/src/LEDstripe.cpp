@@ -18,15 +18,19 @@ extern "C" {
 #include <type_traits>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <csignal>
 
 
 /**
  * @brief A tightly packed struct representing a 24-bit GRB value for WS2812B LEDs.
  */
 struct [[gnu::packed]] GRB {
-    uint8_t g; ///< Green component (Most Significant Byte in WS2812B)
-    uint8_t r; ///< Red component
-    uint8_t b; ///< Blue component
+    uint8_t g = 0; ///< Green component (Most Significant Byte in WS2812B)
+    uint8_t r = 0; ///< Red component
+    uint8_t b = 0; ///< Blue component
+
+    constexpr GRB(){}
 
     /**
      * @brief Constructor to initialize the GRB color.
@@ -85,7 +89,7 @@ void setLEDColorToIndex(size_t index, const ColorType& color) {
  */
 void setLEDColorToAll(const color::RGB<uint8_t>& color){
     for(size_t i = 0; i < NUM_LEDS; ++i){
-        globalLEDdata[index] = GRB(color);
+        globalLEDdata[i] = GRB(color);
     }
 }
 
