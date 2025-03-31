@@ -24,16 +24,26 @@ if ! sudo make install; then
 fi
 
 
-# Check for statusLED cronjob
-CRONJOB="*/5 * * * * /usr/local/bin/statusLED"
-CRON_EXISTS=$(sudo crontab -l 2>/dev/null | grep -F "$CRONJOB" || true)
+# Define cron jobs
+CRONJOBS=(
+  "*/5 * * * * /usr/local/bin/statusLED"
+  "0 3 * * * apt update && apt upgrade -y && apt autoclean && apt autoremove -y"
+  "0 3 */14 * * find /var/log -type f -mtime +30 -exec rm -f {} \; && rm -rf /tmp/* /var/tmp/* && journalctl --vacuum-time=30d && apt autoremove --purge -y && apt clean && rm -rf ~/.cache/*"
+)
 
-if [ -z "$CRON_EXISTS" ]; then
-    echo "Adding cronjob to run statusLED every 5 minutes."
-    (sudo crontab -l 2>/dev/null; echo "$CRONJOB") | sudo crontab -
-else
-    echo "Cronjob for statusLED already exists."
-fi
+# Get current crontab
+CURRENT_CRONTAB=$(sudo crontab -l 2>/dev/null || true)
+
+# Loop through cron jobs
+for CRONJOB in "${CRONJOBS[@]}"; do
+  if ! echo "$CURRENT_CRONTAB" | grep -Fq "$CRONJOB"; then
+    echo "Adding cronjob: $CRONJOB"
+    (echo "$CURRENT_CRONTAB"; echo "$CRONJOB") | sudo crontab -
+    CURRENT_CRONTAB=$(sudo crontab -l 2>/dev/null || true)  # Update current crontab
+  else
+    echo "Cronjob already exists: $CRONJOB"
+  fi
+done
 
 # Check if shutdownButton is already set to run on startup
 SERVICE_FILE="/etc/systemd/system/shutdownButton.service"
