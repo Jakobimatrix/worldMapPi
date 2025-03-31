@@ -30,18 +30,7 @@ extern "C" {
 bool EXIT;
 const std::string PROCESS_NAME = "statusLED";
 
-//https://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c
-std::string exec(const char* cmd) {
-    std::tr1::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) return "ERROR";
-    char buffer[128];
-    std::string result = "";
-    while (!feof(pipe.get())) {
-        if (fgets(buffer, 128, pipe.get()) != NULL)
-            result += buffer;
-    }
-    return result;
-}
+
 void signalHandler( int signum)
 {
     EXIT = true;   
