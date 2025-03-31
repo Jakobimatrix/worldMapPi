@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <string_view>
 
 
 std::string exec(const char* cmd){
@@ -36,7 +37,9 @@ bool isProcessRunning(const std::string& process_name) {
     const std::string allProcesses = exec(command.str().c_str());
 
     // Count occurrences of process_name
-    const auto occurrences = std::ranges::count(std::views::split(allProcesses, '\n'), process_name);
+    using std::operator""sv;
+    constexpr auto delim{"\n"sv};
+    const auto occurrences = std::ranges::count(std::views::split(allProcesses, delim), process_name);
 
     return occurrences > 1;
 }
