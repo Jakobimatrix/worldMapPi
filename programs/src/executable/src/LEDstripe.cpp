@@ -171,7 +171,7 @@ void programRGB(){
             return;   
         }
         setLEDColorToAll(current_color);
-        color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
+        next_color = color::RGB<uint8_t>(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
         sleep(5);
@@ -179,7 +179,7 @@ void programRGB(){
             return;   
         }
         setLEDColorToAll(current_color);
-        color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
+        next_color = color::RGB<uint8_t>(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
         sleep(5);
