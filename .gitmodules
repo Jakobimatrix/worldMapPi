@@ -1,3 +1,6 @@
 [submodule "WiringPiLibrary/WiringPi"]
 	path = WiringPiLibrary/WiringPi
 	url = https://github.com/WiringPi/WiringPi.git
+[submodule "programs/src/color"]
+	path = programs/src/color
+	url = https://github.com/Jakobimatrix/color.git

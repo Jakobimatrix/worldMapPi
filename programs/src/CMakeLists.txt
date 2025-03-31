@@ -14,3 +14,8 @@ target_include_directories(srcLib
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR/lib}
 )
+
+
+# color lib
+add_library(color_lib INTERFACE)
+target_include_directories(color_lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/color/include")
