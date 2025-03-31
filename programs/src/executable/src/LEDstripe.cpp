@@ -14,6 +14,7 @@ extern "C" {
 
 #include <system/system.hpp>
 #include <color/color.hpp>
+#include <timer/collecting_timer.hpp>
 
 #include <type_traits>
 #include <chrono>
@@ -60,12 +61,14 @@ constexpr int PIN = 25;
 constexpr size_t NUM_LEDS = 10;
 
 std::array<GRB, NUM_LEDS> globalLEDdata;
+CollectingTimer timer;
+
 
 
 
 void signalHandler(int signum)
 {
-    EXIT = true;   
+    EXIT = true;
 }
 
 
@@ -119,17 +122,25 @@ inline void resetAllLEDs() {
 inline void sendBit(bool bit) {
     // https://www.mikrocontroller.net/articles/WS2812_Ansteuerung
     // https://cpldcpu.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/
+    timer.stop("1_off");
+    timer.stop("0_off");
     if (bit) {
         // Send '1'
+        timer.start("1_on");
         digitalWrite(PIN, 1);
         delayNanos(9);
         digitalWrite(PIN, 0);
+        timer.stop("1_on");
+        timer.start("1_off");
         delayNanos(350);
     } else {
         // Send '0'
+        timer.start("0_on");
         digitalWrite(PIN, 1);
         delayNanos(350);
         digitalWrite(PIN, 0);
+        timer.stop("0_on");
+        timer.start("0_off");
         delayNanos(9);
     }
 }
@@ -156,6 +167,8 @@ void writeToLEDStrip() {
     for (const auto& led : globalLEDdata) {
         sendLED(led);
     }
+    timer.stop("1_off");
+    timer.stop("0_off");
 }
 
 
@@ -171,6 +184,7 @@ void programRGB(){
         color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
+        std::cout << timer << "\n";
         sleep(5);
         if(EXIT){
             return;   
@@ -179,6 +193,7 @@ void programRGB(){
         next_color = color::RGB<uint8_t>(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
+        std::cout << timer << "\n";
         sleep(5);
         if(EXIT){
             return;   
@@ -187,6 +202,7 @@ void programRGB(){
         next_color = color::RGB<uint8_t>(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
+        std::cout << timer << "\n";
         sleep(5);
         if(EXIT){
             return;   
@@ -194,6 +210,7 @@ void programRGB(){
         setLEDColorToAll(black);
         writeToLEDStrip();
         sleep(1);
+        timer = CollectingTimer();
     }
 }
 
@@ -212,7 +229,8 @@ int main(){
 
     //interrupthandler in case the system decides to shut down
     signal(SIGTERM, signalHandler);
-    signal(SIGINT, signalHandler);    
+    signal(SIGINT, signalHandler);
+    
     programRGB();
     
     return 0;

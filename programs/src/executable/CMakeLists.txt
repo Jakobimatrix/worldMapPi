@@ -10,7 +10,7 @@ target_link_libraries(shutdownButton PRIVATE wiringPi system_lib)
 list(APPEND ALL_EXECUTABLES shutdownButton)
 
 add_executable(LEDstripe src/LEDstripe.cpp)
-target_link_libraries(LEDstripe PRIVATE wiringPi system_lib color_lib)
+target_link_libraries(LEDstripe PRIVATE wiringPi system_lib color_lib timer_lib)
 list(APPEND ALL_EXECUTABLES LEDstripe)
 
 

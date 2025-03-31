@@ -4,3 +4,6 @@
 [submodule "programs/src/color"]
 	path = programs/src/color
 	url = https://github.com/Jakobimatrix/color.git
+[submodule "programs/src/timer"]
+	path = programs/src/timer
+	url = https://github.com/Jakobimatrix/timer.git
