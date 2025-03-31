@@ -24,7 +24,7 @@ std::string exec(const char* cmd){
 }
 
 
-bool isProcessRunning(const std::string& process_name) {
+bool isProcessRunningMoreThanOnce(const std::string& process_name) {
     if (process_name.empty()) {
         return false;
     }
@@ -39,7 +39,11 @@ bool isProcessRunning(const std::string& process_name) {
     // Count occurrences of process_name
     using std::operator""sv;
     constexpr auto delim{"\n"sv};
-    const auto occurrences = std::ranges::count(std::views::split(allProcesses, delim), process_name);
+    const auto occurrences = std::ranges::count_if(
+        std::views::split(allProcesses, delim),
+        [&](const auto& subrange) {
+            return std::string(subrange.begin(), subrange.end()) == process_name;
+        });
 
     return occurrences > 1;
 }

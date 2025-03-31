@@ -30,4 +30,4 @@ std::string exec(const char* cmd);
  * @note This function uses `exec()` to run shell commands, so it is platform-dependent.
  * @warning If the process name is a substring of another process, false positives may occur.
  */
-bool isProcessRunning(const std::string& process_name);
+bool isProcessRunningMoreThanOnce(const std::string& process_name);

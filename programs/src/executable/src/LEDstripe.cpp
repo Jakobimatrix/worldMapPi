@@ -167,7 +167,7 @@ void programRGB(){
 
 
 int main(){
-	if(isProcessRunning(PROCESS_NAME)){
+	if(isProcessRunningMoreThanOnce(PROCESS_NAME)){
 		return 0;
 	}
 
