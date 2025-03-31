@@ -14,7 +14,7 @@ echo "======================================================\n"
 
 cd ../../programs
 
-[ -d build ] || mkdir build
+mkdir -p build
 cd build
 cmake ..
 cmake --build .
