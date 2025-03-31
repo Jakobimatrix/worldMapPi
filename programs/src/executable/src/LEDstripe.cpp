@@ -41,10 +41,10 @@ struct [[gnu::packed]] GRB {
      * @brief Constructor to initialize the GRB color.
      * @param color The Color as RGB<uint8_t>
      */
-    constexpr GRB(const RGB<uint8_t>& color): g(color.g), r(color.r), b(color.b) {}
+    constexpr GRB(const color::RGB<uint8_t>& color): g(color.g), r(color.r), b(color.b) {}
         
     template <class ColorType>
-    constexpr GRB(const ColorType& color) : GRB(RGB<uint8_t>(color)){}
+    constexpr GRB(const ColorType& color) : GRB(color::RGB<uint8_t>(color)){}
 };
 static_assert(sizeof(GRB) == 3, "GRB struct must be exactly 3 bytes");
 
@@ -83,7 +83,7 @@ void setLEDColorToIndex(size_t index, const ColorType& color) {
  * 
  * @param color The color object from the `color` library.
  */
-void setLEDColorToAll(const RGB<uint8_t>& color){
+void setLEDColorToAll(const color::RGB<uint8_t>& color){
     for(size_t i = 0; i < NUM_LEDS; ++i){
         globalLEDdata[index] = GRB(color);
     }
@@ -152,13 +152,13 @@ void writeToLEDStrip() {
 
 
 void programRGB(){
-    color::rgb<uint8_t> current_color(255, 0, 0);
+    color::RGB<uint8_t> current_color(255, 0, 0);
     while(42){
         if(EXIT){
             return;   
         }
         setLEDColorToAll(current_color);
-        color::rgb<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
+        color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
         sleep(1);
