@@ -1,13 +1,4 @@
-# Find all .cpp files
-file(GLOB SRC_FILES *.cpp)
-
 add_library(srcLib INTERFACE 
-    ${SRC_FILES}
+    lib/math.hpp
+    lib/system.hpp
 )
-
-# Ensure the current source directory is included for header-only files or .cpp files
-target_include_directories(srcLib
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
