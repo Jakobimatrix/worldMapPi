@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include <ranges>
+#include <algorithm>
 #include <cstdio>
 #include <memory>
 #include <string>
@@ -35,7 +36,7 @@ bool isProcessRunning(const std::string& process_name) {
     const std::string allProcesses = exec(command.str().c_str());
 
     // Count occurrences of process_name
-    const auto occurrences = std::ranges::count(allProcesses | std::views::split('\n'), process_name);
+    const auto occurrences = std::ranges::count(std::views::split(allProcesses, '\n'), process_name);
 
     return occurrences > 1;
 }
