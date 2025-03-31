@@ -14,6 +14,8 @@ include(cmake/Warnings.cmake)
 # Find WiringPi
 find_library(WIRINGPI_LIB wiringPi REQUIRED)
 
+set(BUILD_TESTS OFF)
+
 # Add subdirectories
 add_subdirectory(src)
 
