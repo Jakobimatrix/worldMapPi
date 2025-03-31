@@ -65,7 +65,7 @@ std::array<GRB, NUM_LEDS> globalLEDdata;
 
 void signalHandler(int signum)
 {
-	EXIT = true;   
+    EXIT = true;   
 }
 
 
@@ -157,6 +157,7 @@ void writeToLEDStrip() {
 
 void programRGB(){
     color::RGB<uint8_t> current_color(255, 0, 0);
+    constexpr color::RGB<uint8_t> black(0, 0, 0);
     while(42){
         if(EXIT){
             return;   
@@ -165,25 +166,47 @@ void programRGB(){
         color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
         current_color = next_color;
         writeToLEDStrip();
+        sleep(5);
+        if(EXIT){
+            return;   
+        }
+        setLEDColorToAll(current_color);
+        color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
+        current_color = next_color;
+        writeToLEDStrip();
+        sleep(5);
+        if(EXIT){
+            return;   
+        }
+        setLEDColorToAll(current_color);
+        color::RGB<uint8_t> next_color(current_color.g, current_color.b, current_color.r);
+        current_color = next_color;
+        writeToLEDStrip();
+        sleep(5);
+        if(EXIT){
+            return;   
+        }
+        setLEDColorToAll(black);
+        writeToLEDStrip();
         sleep(1);
     }
 }
 
 
 int main(){
-	if(isProcessRunningMoreThanOnce(PROCESS_NAME)){
-		return 0;
-	}
+    if(isProcessRunningMoreThanOnce(PROCESS_NAME)){
+        return 0;
+    }
 
-	EXIT = false;
+    EXIT = false;
     
     const int wiringPIstatus = wiringPiSetup();//setuo GPIO!! must be done before comunication with GPIO
-	if(wiringPIstatus == -1){
-		return -1;
-	}
+    if(wiringPIstatus == -1){
+        return -1;
+    }
 
     //interrupthandler in case the system decides to shut down
-	signal(SIGTERM, signalHandler);
+    signal(SIGTERM, signalHandler);
     
     programRGB();
     

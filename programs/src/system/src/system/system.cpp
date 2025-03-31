@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <memory>
 #include <string>
-#include <string_view>
 
 
 std::string exec(const char* cmd){
@@ -36,14 +35,6 @@ bool isProcessRunningMoreThanOnce(const std::string& process_name) {
     // Execute command and get process list
     const std::string allProcesses = exec(command.str().c_str());
 
-    // Count occurrences of process_name
-    using std::operator""sv;
-    constexpr auto delim{"\n"sv};
-    const auto occurrences = std::ranges::count_if(
-        std::views::split(allProcesses, delim),
-        [&](const auto& subrange) {
-            return std::string(subrange.begin(), subrange.end()) == process_name;
-        });
-
-    return occurrences > 1;
+    // count number of lines
+    return std::ranges::count(allProcesses, '\n') > 1;
 }
