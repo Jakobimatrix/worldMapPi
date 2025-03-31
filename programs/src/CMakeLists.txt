@@ -1,4 +1,3 @@
-add_library(srcLib INTERFACE 
-    lib/math.hpp
-    lib/system.hpp
-)
+add_subdirectory(color)
+add_subdirectory(system)
+add_subdirectory(executable)
