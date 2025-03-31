@@ -157,7 +157,7 @@ void writeToLEDStrip() {
 
 void programRGB(){
     color::RGB<uint8_t> current_color(255, 0, 0);
-    constexpr color::RGB<uint8_t> black(0, 0, 0);
+    const color::RGB<uint8_t> black(0, 0, 0);
     while(42){
         if(EXIT){
             return;   
