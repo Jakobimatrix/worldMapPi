@@ -88,7 +88,7 @@ void setLEDColorToIndex(size_t index, const ColorType& color) {
  * @param color The color object from the `color` library.
  */
 void setLEDColorToAll(const color::RGB<uint8_t>& color){
-    for(size_t i = 0; i < NUM_LEDS; ++i){
+    for(size_t i = 0; i < NUM_LEDS; i = i + 2){
         globalLEDdata[i] = GRB(color);
     }
 }
