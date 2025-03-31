@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash
 
 echo "updating\n"
 git submodule update --init --recursive

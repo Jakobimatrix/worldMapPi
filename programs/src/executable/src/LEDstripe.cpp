@@ -57,7 +57,7 @@ static_assert(sizeof(GRB) == 3, "GRB struct must be exactly 3 bytes");
 bool EXIT = false;
 const std::string PROCESS_NAME = "LEDstripe";
 constexpr int PIN = 25;
-constexpr size_t NUM_LEDS = 60;
+constexpr size_t NUM_LEDS = 10;
 
 std::array<GRB, NUM_LEDS> globalLEDdata;
 
@@ -106,23 +106,31 @@ inline void delayNanos(int ns) {
     }
 }
 
+inline void resetAllLEDs() {
+    digitalWrite(PIN, 0);
+    std::this_thread::sleep_for(std::chrono::microseconds(300));
+    digitalWrite(PIN, 1);
+}
+
 /**
  * @brief Sends a single bit to the LED strip.
  * @param bit The bit to send (0 or 1).
  */
 inline void sendBit(bool bit) {
+    // https://www.mikrocontroller.net/articles/WS2812_Ansteuerung
+    // https://cpldcpu.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/
     if (bit) {
-        // Send '1' bit (T1H = 0.8µs HIGH, T1L = 0.45µs LOW)
+        // Send '1'
         digitalWrite(PIN, 1);
-        delayNanos(800);
+        delayNanos(9);
         digitalWrite(PIN, 0);
-        delayNanos(450);
+        delayNanos(350);
     } else {
-        // Send '0' bit (T0H = 0.4µs HIGH, T0L = 0.85µs LOW)
+        // Send '0'
         digitalWrite(PIN, 1);
-        delayNanos(400);
+        delayNanos(350);
         digitalWrite(PIN, 0);
-        delayNanos(850);
+        delayNanos(9);
     }
 }
 
@@ -144,22 +152,19 @@ void sendLED(const GRB& led) {
  */
 void writeToLEDStrip() {
     pinMode(PIN, OUTPUT);
-    
+    resetAllLEDs();
     for (const auto& led : globalLEDdata) {
         sendLED(led);
     }
-
-    // Reset condition (low for at least 50µs)
-    digitalWrite(PIN, 0);
-    delayMicroseconds(55);
 }
 
 
 void programRGB(){
-    color::RGB<uint8_t> current_color(255, 0, 0);
+    color::RGB<uint8_t> current_color(0, 0, 0);
     const color::RGB<uint8_t> black(0, 0, 0);
     while(42){
         if(EXIT){
+	    resetAllLEDs();
             return;   
         }
         setLEDColorToAll(current_color);
@@ -207,7 +212,7 @@ int main(){
 
     //interrupthandler in case the system decides to shut down
     signal(SIGTERM, signalHandler);
-    
+    signal(SIGINT, signalHandler);    
     programRGB();
     
     return 0;
